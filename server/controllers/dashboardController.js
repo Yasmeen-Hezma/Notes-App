@@ -5,7 +5,6 @@ const { default: mongoose } = require('mongoose');
 exports.dashboard = async (req, res) => {
     let perPage = 12;
     let page = req.query.page || 1;
-    //const objectIdInstance = new mongoose.Types.ObjectId();
     try {
         const notes = await Note.aggregate([
             { $sort: { updatedAt: -1 } },
@@ -13,7 +12,7 @@ exports.dashboard = async (req, res) => {
             {
                 $project: {
                     title: { $substr: ["$title", 0, 30] },
-                    body: { $substr: ["$body", 0, 1000] },
+                    body: { $substr: ["$body", 0, 100] },
 
                 }
             }

@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         defualt: false
     },
-    // verificationToken: String,
+
 });
 
 module.exports = mongoose.model('User', userSchema);

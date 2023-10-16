@@ -36,7 +36,9 @@ module.exports = function (passport) {
             {
                 clientID: process.env.GOOGLE_CLIENT_ID,
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                callbackURL: process.env.GOOGLE_CALLBACK_URL,
+                callbackURL: process.env.NODE_ENV === 'production'
+                    ? 'https://notes-app-fazg.onrender.com/'
+                    : 'http://localhost:3000/google/callback',
             },
             async function (accessToken, refreshToken, profile, done) {
                 const newUser = {

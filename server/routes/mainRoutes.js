@@ -32,6 +32,4 @@ router.get('/reset-password', mainController.resetPassword);
 router.post('/reset-password', mainController.resetPasswordPost);
 
 
-
-
 module.exports = router;
