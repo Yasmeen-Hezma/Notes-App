@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&family=Unbounded:wght@300;700&display=swap"
+        rel="stylesheet">
+    <title>
+        <%- title %>
+    </title>
+    <link href="https://unpkg.com/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+            <a href="/"
+                class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-primary text-decoration-none fw-bold fs-2">
+                Notes
+            </a>
+            <% if (locals.isAuthenticated) { %>
+                <form class="nav col-12 col-md-auto flex-fill mb-2 justify-content-center mb-md-0" role="search"
+                    method="POST" action="/search">
+                    <input type="search" name="searchTerm" class="form-control border-primary" placeholder="Search..."
+                        aria-label="Search">
+                </form>
+                <% } else { %>
+                    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+                        <li><a href="features" class="nav-link px-2 link-dark">Features</a></li>
+                        <li><a href="/FAQs" class="nav-link px-2 link-dark">FAQs</a></li>
+                        <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
+                    </ul>
+                    <% } %>
+                        <div class="col-md-3 text-end">
+                            <% if (locals.isAuthenticated) { %>
+                                <a href="/logout" type="button" class="btn btn-outline-primary me-2">Log Out</a>
+                                <% } else { %>
+                                    <a href="/sign-up" type="button" class="btn btn-outline-primary me-2">Sign Up</a>
+                                    <a href="/login" type="button" class="btn btn-primary">Log In</a>
+                                    <% } %>
+
+
+                        </div>
+        </header>
+    </div>
+
+    <%- body %>
+        <div class="container-fluid">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4">
+                <p class="col-md-4 mb-0 text-muted">© 2023 Notes, Inc</p>
+
+                <a href="/"
+                    class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto text-primary text-decoration-none fw-bold">
+                    Notes.
+                </a>
+
+
+            </footer>
+        </div>
+
+        <script src="https://unpkg.com/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
