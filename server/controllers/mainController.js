@@ -27,14 +27,12 @@ exports.loginPost = (req, res, next) => {
             return res.redirect('/login');
         }
         if (!user.isverified) {
-            req.flash('error', 'This email is not verified yet.');
-            return res.redirect('/resend');
+            return res.redirect('/resend-email');
         }
         req.logIn(user, (err) => {
             if (err) {
                 return next(err);
             }
-            req.flash('success', 'You have successfuly logged in');
             return res.redirect('/dashboard');
         });
     })(req, res, next);
@@ -70,7 +68,7 @@ exports.signUpPost = async (req, res) => {
             req.flash('error', 'This email already exists');
             return res.redirect('/sign-up');
         }
-        if (password.length < 6) {
+        if (password.length < 7) {
             req.flash('error', 'Password must be more than 6 characters');
             return res.redirect('/sign-up');
         }
@@ -78,7 +76,7 @@ exports.signUpPost = async (req, res) => {
         const newUser = new User({ email, password: hashedPassword });
         await newUser.save();
         const token = await new Token({
-            userId: newUser.id, // Corrected from user.id to newUser.id
+            userId: newUser.id,
             token: crypto.randomBytes(32).toString("hex"),
         }).save();
         const url = `${process.env.BASE_URL}${newUser._id}/verify/${token.token}`;
@@ -90,14 +88,13 @@ exports.signUpPost = async (req, res) => {
 };
 // verify email (page)
 exports.verifyEmailPage = async (req, res) => {
-    res.render('verify-email', { title: 'Verify Email', messages: req.flash() })
+    res.render('verify-email', { title: 'Verify Email' })
 }
 // verify email
 exports.verifyEmail = async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.params.id });
         if (!user) {
-            req.flash('error', 'This email already exists');
             return res.status(400).send({ message: "Invalid link" });
         }
         const token = await Token.findOne({
@@ -111,7 +108,6 @@ exports.verifyEmail = async (req, res) => {
         await Token.findByIdAndDelete(token._id);
         res.render('login', { title: 'Verify Email', messages: req.flash() });
     } catch (error) {
-        console.log(error);
         res.status(500).send({ message: "Internal Server Error" });
     }
 }
@@ -124,10 +120,9 @@ exports.resendEmailPost = async (req, res) => {
     const { email } = req.body;
     try {
         const user = await User.findOne({ email });
-        console.log(user);
         if (!user) {
             req.flash('error', 'Email not found');
-            return res.redirect('/sign-up');
+            return res.redirect('/resend-email');
         }
         // Delete any existing verification tokens for the user
         await Token.findOneAndDelete({ userId: user._id });
@@ -165,7 +160,6 @@ exports.resetPasswordPost = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
         await user.save();
-        req.flash('success', 'Password has been successfully reset');
         return res.redirect('/login');
     }
     catch (e) {

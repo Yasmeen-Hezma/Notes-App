@@ -11,7 +11,12 @@
             <p class="description lead">
                 📝 Write, 📂 Organize, 🚀 Achieve! Your all-in-one note-taking companion.
             </p>
-            <a href="/sign-up" class="btn btn-primary btn-lg">Get Started</a>
+            <% if (locals.isAuthenticated) { %>
+                <a href="/dashboard" class="btn btn-primary btn-lg">Get Started</a>
+                <% } else { %>
+                    <a href="/sign-up" class="btn btn-primary btn-lg">Get Started</a>
+                    <% } %>
+
         </main>
     </div>
 </body>
