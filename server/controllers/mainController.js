@@ -106,7 +106,7 @@ exports.verifyEmail = async (req, res) => {
         }
         await User.findByIdAndUpdate(user._id, { isverified: true });
         await Token.findByIdAndDelete(token._id);
-        res.render('login', { title: 'Verify Email', messages: req.flash() });
+        res.render('login', { title: 'login', messages: req.flash() });
     } catch (error) {
         res.status(500).send({ message: "Internal Server Error" });
     }
